@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const _fs=require('fs');
+const _fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const https = require('https');
@@ -32,7 +32,7 @@ app.post('/api/generate_vip', async (req, res) => {
       return res.status(400).json({ error: 'No input provided. Send input or a JSON payload.' });
     }
 
-    const { clean_rules, clean_foods, foods_good_for_user, foods_not_good_for_user,language } = userInput;
+    const { clean_rules, clean_foods, foods_good_for_user, foods_not_good_for_user, language } = userInput;
 
     let combinedContent = '';
     if (clean_rules) combinedContent += clean_rules + '\n\n';
@@ -54,8 +54,8 @@ app.post('/api/generate_vip', async (req, res) => {
     }
 ]`;
 
-const example=_fs.readFileSync(path.join(__dirname,'exmple.txt'),'utf8');
-  
+    const example = _fs.readFileSync(path.join(__dirname, 'exmple.txt'), 'utf8');
+
 
     const messages = [
       {
@@ -75,6 +75,11 @@ const example=_fs.readFileSync(path.join(__dirname,'exmple.txt'),'utf8');
         - Pay attention to the maximum amount of olive oil. You can divide this amount between lunch and dinner. For example, half a spoon at lunch and half a spoon at dinner.
         - maximum 1 type of carbohydrate per day is allowed.
         - Fried or roasted food is forbidden.
+         Separate foods with /n instead of commas.
+        On fasting days, increase our protein intake by 15%.
+        Every day should include avocado in one of the meals.
+        On fasting days, only use meat protein in meals.
+        For vegetables, use a variety of vegetables that are sent.
         IMPORTANT: Read the information about each food or rule and implement it carefully. For example, if it is mentioned that a food should be consumed every day, then be sure to include it in the plan.
 
         ${combinedContent.trim()}
@@ -83,18 +88,14 @@ const example=_fs.readFileSync(path.join(__dirname,'exmple.txt'),'utf8');
         ${example}
 
         dont use exact same sample as the example and have some And choose foods differently and creatively.
-        Separate foods with /n instead of commas.
-        On fasting days, increase our protein intake by 15%.
-        Every day should include avocado in one of the meals.
-        On fasting days, only use meat protein in meals.
-        For vegetables, use a variety of vegetables that are sent.
+       
 
         return the answer into ${language || 'English'} language. All foods and units should be in ${language || 'English'}.
         Just prepare a meal combination for the user from the list of foods sent to you and pay very close attention to the rules.
         Please return the meal plan in JSON format. output format: ${outputFormat}
         `
       },
-     
+
     ];
 
     const response = await axios.post('https://api.openai.com/v1/chat/completions', {
@@ -125,8 +126,8 @@ const example=_fs.readFileSync(path.join(__dirname,'exmple.txt'),'utf8');
     }
 
 
-    
-   
+
+
     return res.json({
       content: parsed,
       model: response.data?.model || openAiModel,
@@ -144,14 +145,14 @@ const example=_fs.readFileSync(path.join(__dirname,'exmple.txt'),'utf8');
   }
 });
 
-const config={
+const config = {
   key: _fs.readFileSync("/etc/letsencrypt/live/nutrostyle.nutrosal.com/privkey.pem"),
   cert: _fs.readFileSync("/etc/letsencrypt/live/nutrostyle.nutrosal.com/fullchain.pem")
 }
 
-const server=https.createServer({
+const server = https.createServer({
   ...config
-},app);
+}, app);
 
 
 

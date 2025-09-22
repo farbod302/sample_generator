@@ -79,7 +79,7 @@ app.post('/api/generate_vip', async (req, res) => {
         On fasting days, increase our protein intake by 15%.
         Every day should include avocado in one of the meals.
         On fasting days, only use meat protein in meals.
-        For vegetables, use a variety of vegetables that are sent.
+        For vegetables, use a variety of vegetables that are sent and dont use For vegetables, use a variety of vegetables and don't write vegetables in general. For example, write cucumber, lettuce, spinach, etc..
         IMPORTANT: Read the information about each food or rule and implement it carefully. For example, if it is mentioned that a food should be consumed every day, then be sure to include it in the plan.
 
         ${combinedContent.trim()}

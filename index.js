@@ -64,6 +64,7 @@ app.post('/api/generate_vip', async (req, res) => {
         Each day must include breakfast, snack 1, lunch, snack 2, and dinner.
         On fasting days, leave breakfast and snack 1 empty.
         Respect all rules carefully.
+        max 2 day fasting is allowed in week.
         some of rules:
         - if the user is fasting, you should not include breakfast and snack 1 in the meal plan.
         - Important: Only one carbohydrate source per day is allowed.   bread, quinoa, oats, lentils are carbohydrates.

@@ -75,10 +75,10 @@ app.post('/api/generate_vip', async (req, res) => {
         - Please list the food along with the quantity being sent.
         - Pay attention to the maximum amount of olive oil. You can divide this amount between lunch and dinner. For example, half a spoon at lunch and half a spoon at dinner.
         - maximum 1 type of carbohydrate per day is allowed.
-        - Fried or roasted food is forbidden.
+        - Fried or roasted  food is forbidden.
          Separate foods with backslash n (\\n) instead of commas.
         IMPORTANT: On fasting days, increase protein intake value by 15% exp: Meet 100g -> Meet 115g.
-        IMPORTANT: Every day should include avocado in one of the meals even in fasting days.
+        IMPORTANT: Every day should include avocado or olive in one of the meals even in fasting days.
         On fasting days, only use meat protein in meals.
         For vegetables, use a variety of vegetables that are sent and dont use For vegetables, use a variety of vegetables and don't write vegetables in general. For example, write cucumber, lettuce, spinach, etc..
         IMPORTANT: Read the information about each food or rule and implement it carefully. For example, if it is mentioned that a food should be consumed every day, then be sure to include it in the plan.

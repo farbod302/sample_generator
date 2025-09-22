@@ -77,7 +77,7 @@ app.post('/api/generate_vip', async (req, res) => {
         - maximum 1 type of carbohydrate per day is allowed.
         - Fried or roasted food is forbidden.
          Separate foods with backslash n (\\n) instead of commas.
-        On fasting days, increase our protein intake by 15%.
+        IMPORTANT: On fasting days, increase protein intake value by 15% exp: Meet 100g -> Meet 115g.
         IMPORTANT: Every day should include avocado in one of the meals even in fasting days.
         On fasting days, only use meat protein in meals.
         For vegetables, use a variety of vegetables that are sent and dont use For vegetables, use a variety of vegetables and don't write vegetables in general. For example, write cucumber, lettuce, spinach, etc..

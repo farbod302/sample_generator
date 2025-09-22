@@ -72,7 +72,7 @@ const example=_fs.readFileSync(path.join(__dirname,'exmple.txt'),'utf8');
         sometimes your giving bread and quinoa in single day and its wrong!
         - For snacks, just use fruit, Selma cake (کیک سلما), nuts, and dark chocolate are allowed.
         - Please list the food along with the quantity being sent.
-        - maximum 1 spoon olive oil per day is allowed. you can separate the olive oil into dinner and lunch.exp: half of spoon in lunch and half of spoon in dinner or one spoon in lunch.
+        - Pay attention to the maximum amount of olive oil. You can divide this amount between lunch and dinner. For example, half a spoon at lunch and half a spoon at dinner.
         - maximum 1 type of carbohydrate per day is allowed.
         - Fried or roasted food is forbidden.
         IMPORTANT: Read the information about each food or rule and implement it carefully. For example, if it is mentioned that a food should be consumed every day, then be sure to include it in the plan.
@@ -82,7 +82,12 @@ const example=_fs.readFileSync(path.join(__dirname,'exmple.txt'),'utf8');
         this is an example of the correct samples for 3 days:
         ${example}
 
-        dont use exact same sample as the example.
+        dont use exact same sample as the example and have some And choose foods differently and creatively.
+        Separate foods with /n instead of commas.
+        On fasting days, increase our protein intake by 15%.
+        Every day should include avocado in one of the meals.
+        On fasting days, only use meat protein in meals.
+        For vegetables, use a variety of vegetables that are sent.
 
         return the answer into ${language || 'English'} language. All foods and units should be in ${language || 'English'}.
         Just prepare a meal combination for the user from the list of foods sent to you and pay very close attention to the rules.

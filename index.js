@@ -75,7 +75,7 @@ app.post('/api/generate_vip', async (req, res) => {
         - Pay attention to the maximum amount of olive oil. You can divide this amount between lunch and dinner. For example, half a spoon at lunch and half a spoon at dinner.
         - maximum 1 type of carbohydrate per day is allowed.
         - Fried or roasted food is forbidden.
-         Separate foods with /n instead of commas.
+         Separate foods with backslash n (\\n) instead of commas.
         On fasting days, increase our protein intake by 15%.
         Every day should include avocado in one of the meals.
         On fasting days, only use meat protein in meals.

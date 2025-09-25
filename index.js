@@ -87,7 +87,9 @@ STATIC NUTRITION RULES:
 ${staticRules}
 
 USER-SPECIFIC RULES AND FOOD INFORMATION:
-${combinedContent.trim()}`
+${combinedContent.trim()}
+Dont miss any rule or food information. only summarize them.
+`
       }
     ];
 

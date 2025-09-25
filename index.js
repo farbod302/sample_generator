@@ -89,6 +89,11 @@ app.post('/api/generate_vip', async (req, res) => {
         dont use exact same foods and have some different and creative.
         ${combinedContent.trim()}
 
+
+        this is an example of the correct samples for 3 days:
+        ${example}
+
+
        
        
 

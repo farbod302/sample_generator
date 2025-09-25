@@ -73,8 +73,12 @@ app.post('/api/generate_vip', async (req, res) => {
         sometimes your giving bread and quinoa in single day and its wrong!
         - For snacks, just use fruit, Selma cake (کیک سلما), nuts, and dark chocolate are allowed.
         - Please list the food along with the quantity being sent.
-        - Pay attention to the maximum amount of olive oil. You can divide this amount between lunch and dinner. For example, half a spoon at lunch and half a spoon at dinner.
+        - Pay attention to the maximum amount of olive oil. every day should contain olive oil. You can divide this amount between lunch and dinner. For example, half a spoon at lunch and half a spoon at dinner.
         - maximum 1 type of carbohydrate per day is allowed.
+        - In fast days dont live meals input empty. Write Fast or روزه
+        - if you want to write fruits, choose fruit and write fruits name. dont write fruits in general.
+        - if you want to write vegetables, choose diverse vegetables and write vegetables name. dont write vegetables in general. at least 3 types of vegetables for each meal.
+        - if you want to use red meat, dont use it twice in a day.  red meat is only allowed once in a day.
         - Fried or roasted  food is forbidden.
          Separate foods with backslash n (\\n) instead of commas.
         IMPORTANT: On fasting days, increase protein intake value by 15% exp: Meet 100g -> Meet 115g.

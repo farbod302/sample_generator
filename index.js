@@ -86,13 +86,10 @@ app.post('/api/generate_vip', async (req, res) => {
         On fasting days, only use meat protein in meals.
         For vegetables, use a variety of vegetables that are sent and dont use For vegetables, use a variety of vegetables and don't write vegetables in general. For example, write cucumber, lettuce, spinach, etc..
         IMPORTANT: Read the information about each food or rule and implement it carefully. For example, if it is mentioned that a food should be consumed every day, then be sure to include it in the plan.
+        dont use exact same foods and have some different and creative.
+        // ${combinedContent.trim()}
 
-        ${combinedContent.trim()}
-
-        this is an example of the correct samples for 3 days:
-        ${example}
-
-        dont use exact same sample as the example and have some And choose foods differently and creatively.
+       
        
 
         return the answer into ${language || 'English'} language. All foods and units should be in ${language || 'English'}.

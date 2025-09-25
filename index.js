@@ -15,18 +15,13 @@ const openAiModel = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 app.use(cors());
 app.use(express.json({ limit: '2mb' }));
 
-
-
-
 app.post('/api/generate_vip', async (req, res) => {
   try {
     if (!openAiApiKey) {
       return res.status(400).json({ error: 'OPENAI_API_KEY is not set' });
     }
 
-
     const userInput = req.body
-
 
     if (!userInput) {
       return res.status(400).json({ error: 'No input provided. Send input or a JSON payload.' });
@@ -40,6 +35,40 @@ app.post('/api/generate_vip', async (req, res) => {
     if (foods_good_for_user) combinedContent += "Foods good for user: " + foods_good_for_user + '\n\n';
     if (foods_not_good_for_user) combinedContent += "Foods not good for user: " + foods_not_good_for_user + '\n\n';
 
+    // مرحله اول: خلاصه‌سازی و بهینه‌سازی قوانین
+    const summarizeMessages = [
+      {
+        role: 'system',
+        content: `You are a nutrition rules optimizer. Your task is to summarize and optimize the nutrition rules and food information provided by the user.
+        
+        Your job is to:
+        1. Extract the most important nutrition rules
+        2. Summarize food lists and preferences
+        3. Create a concise, clear set of rules that can be easily understood by another AI model
+        4. Keep all critical information but make it more organized and concise
+        5. Maintain the original meaning and requirements
+        
+        Return the optimized rules in a clear, structured format that another AI can easily follow.
+        Use the same language as the input (${language || 'English'}).`
+      },
+      {
+        role: 'user',
+        content: `Please optimize and summarize these nutrition rules and food information:\n\n${combinedContent.trim()}`
+      }
+    ];
+
+    // درخواست اول برای خلاصه‌سازی
+    const summarizeResponse = await axios.post('https://api.openai.com/v1/chat/completions', {
+      model: openAiModel,
+      messages: summarizeMessages
+    }, {
+      headers: {
+        'Authorization': `Bearer ${openAiApiKey}`,
+        'Content-Type': 'application/json'
+      },
+    });
+
+    const optimizedRules = summarizeResponse.data?.choices?.[0]?.message?.content ?? '';
 
     const outputFormat = `[
     {
@@ -56,11 +85,11 @@ app.post('/api/generate_vip', async (req, res) => {
 
     const example = _fs.readFileSync(path.join(__dirname, 'exmple.txt'), 'utf8');
 
-
+    // مرحله دوم: تولید برنامه غذایی با قوانین بهینه‌شده
     const messages = [
       {
         role: 'system',
-        content: `You are a nutrition assistant. Your task is to create a 7-day meal plan based on the food list I will provide and the following rules.
+        content: `You are a nutrition assistant. Your task is to create a 7-day meal plan based on the optimized rules provided.
         Each day must include breakfast, snack 1, lunch, snack 2, and dinner.
         On fasting days, leave breakfast and snack 1 empty.
         Respect all rules carefully.
@@ -87,24 +116,21 @@ app.post('/api/generate_vip', async (req, res) => {
         For vegetables, use a variety of vegetables that are sent and dont use For vegetables, use a variety of vegetables and don't write vegetables in general. For example, write cucumber, lettuce, spinach, etc..
         IMPORTANT: Read the information about each food or rule and implement it carefully. For example, if it is mentioned that a food should be consumed every day, then be sure to include it in the plan.
         dont use exact same foods and have some different and creative.
-        ${combinedContent.trim()}
-
+        
+        OPTIMIZED RULES AND FOOD INFORMATION:
+        ${optimizedRules}
 
         this is an example of the correct samples for 3 days:
         ${example}
-
-
-       
-       
 
         return the answer into ${language || 'English'} language. All foods and units should be in ${language || 'English'}.
         Just prepare a meal combination for the user from the list of foods sent to you and pay very close attention to the rules.
         Please return the meal plan in JSON format. output format: ${outputFormat}
         `
       },
-
     ];
 
+    // درخواست دوم برای تولید برنامه غذایی
     const response = await axios.post('https://api.openai.com/v1/chat/completions', {
       model: openAiModel,
       messages
@@ -132,13 +158,11 @@ app.post('/api/generate_vip', async (req, res) => {
       return res.status(500).json({ error: 'LLM output is not valid JSON', details: e.message });
     }
 
-
-
-
     return res.json({
       content: parsed,
       model: response.data?.model || openAiModel,
       usage: response.data?.usage || null,
+      optimizedRules: optimizedRules, // اضافه کردن قوانین بهینه‌شده به پاسخ
     });
   } catch (error) {
     const status = error.response?.status || 500;
@@ -160,10 +184,6 @@ const config = {
 const server = https.createServer({
   ...config
 }, app);
-
-
-
-
 
 server.listen(port, () => {
   console.log(`Server listening on https://nutrostyle.nutrosal.com:${port}`);

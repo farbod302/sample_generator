@@ -76,7 +76,7 @@ app.post('/api/generate_vip', async (req, res) => {
         5. Maintain the original meaning and requirements
         
         Return the optimized rules in a clear, structured format that another AI can easily follow.
-        Use the same language as the input (${language || 'English'}).`
+        Use the same language as the input (${language || 'English'}) for plans but return summarize in english language.`
       },
       {
         role: 'user',
@@ -91,9 +91,7 @@ Dont miss any rule or food information. only summarize them.
 `
       }
     ];
-    console.log({
-      combinedContent
-    });
+    
 
 
     // درخواست اول برای خلاصه‌سازی

@@ -36,6 +36,34 @@ app.post('/api/generate_vip', async (req, res) => {
     if (foods_not_good_for_user) combinedContent += "Foods not good for user: " + foods_not_good_for_user + '\n\n';
 
     // مرحله اول: خلاصه‌سازی و بهینه‌سازی قوانین
+    const staticRules = `You are a nutrition assistant. Your task is to create a 7-day meal plan based on the optimized rules provided.
+    Each day must include breakfast, snack 1, lunch, snack 2, and dinner.
+    On fasting days, leave breakfast and snack 1 empty.
+    Respect all rules carefully.
+    max 2 day fasting is allowed in week.
+    some of rules:
+    - if the user is fasting, you should not include breakfast and snack 1 in the meal plan.
+    - Important: Only one carbohydrate source per day is allowed.   bread, quinoa, oats, lentils are carbohydrates.
+    If bread is eaten at breakfast, do not include lentils, quinoa, or oats in any other meal that day.
+    If lentils, quinoa, or oats are chosen, then bread must not be included at breakfast.
+    sometimes your giving bread and quinoa in single day and its wrong!
+    - For snacks, just use fruit, Selma cake (کیک سلما), nuts, and dark chocolate are allowed.
+    - Please list the food along with the quantity being sent.
+    - Pay attention to the maximum amount of olive oil. every day should contain olive oil. You can divide this amount between lunch and dinner. For example, half a spoon at lunch and half a spoon at dinner.
+    - maximum 1 type of carbohydrate per day is allowed.
+    - In fast days dont live meals input empty. Write Fast or روزه
+    - if you want to write fruits, choose fruit and write fruits name. dont write fruits in general.
+    - if you want to write vegetables, choose diverse vegetables and write vegetables name. dont write vegetables in general. at least 3 types of vegetables for each meal.
+    - if you want to use red meat, dont use it twice in a day.  red meat is only allowed once in a day.
+    - Fried or roasted  food is forbidden.
+     Separate foods with backslash n (\\n) instead of commas.
+    IMPORTANT: On fasting days, increase protein intake value by 15% exp: Meet 100g -> Meet 115g.
+    IMPORTANT: Every day should include avocado or olive in one of the meals even in fasting days.
+    On fasting days, only use meat protein in meals.
+    For vegetables, use a variety of vegetables that are sent and dont use For vegetables, use a variety of vegetables and don't write vegetables in general. For example, write cucumber, lettuce, spinach, etc..
+    IMPORTANT: Read the information about each food or rule and implement it carefully. For example, if it is mentioned that a food should be consumed every day, then be sure to include it in the plan.
+    dont use exact same foods and have some different and creative.`;
+
     const summarizeMessages = [
       {
         role: 'system',
@@ -53,7 +81,13 @@ app.post('/api/generate_vip', async (req, res) => {
       },
       {
         role: 'user',
-        content: `Please optimize and summarize these nutrition rules and food information:\n\n${combinedContent.trim()}`
+        content: `Please optimize and summarize these nutrition rules and food information:
+
+STATIC NUTRITION RULES:
+${staticRules}
+
+USER-SPECIFIC RULES AND FOOD INFORMATION:
+${combinedContent.trim()}`
       }
     ];
 
@@ -90,32 +124,6 @@ app.post('/api/generate_vip', async (req, res) => {
       {
         role: 'system',
         content: `You are a nutrition assistant. Your task is to create a 7-day meal plan based on the optimized rules provided.
-        Each day must include breakfast, snack 1, lunch, snack 2, and dinner.
-        On fasting days, leave breakfast and snack 1 empty.
-        Respect all rules carefully.
-        max 2 day fasting is allowed in week.
-        some of rules:
-        - if the user is fasting, you should not include breakfast and snack 1 in the meal plan.
-        - Important: Only one carbohydrate source per day is allowed.   bread, quinoa, oats, lentils are carbohydrates.
-        If bread is eaten at breakfast, do not include lentils, quinoa, or oats in any other meal that day.
-        If lentils, quinoa, or oats are chosen, then bread must not be included at breakfast.
-        sometimes your giving bread and quinoa in single day and its wrong!
-        - For snacks, just use fruit, Selma cake (کیک سلما), nuts, and dark chocolate are allowed.
-        - Please list the food along with the quantity being sent.
-        - Pay attention to the maximum amount of olive oil. every day should contain olive oil. You can divide this amount between lunch and dinner. For example, half a spoon at lunch and half a spoon at dinner.
-        - maximum 1 type of carbohydrate per day is allowed.
-        - In fast days dont live meals input empty. Write Fast or روزه
-        - if you want to write fruits, choose fruit and write fruits name. dont write fruits in general.
-        - if you want to write vegetables, choose diverse vegetables and write vegetables name. dont write vegetables in general. at least 3 types of vegetables for each meal.
-        - if you want to use red meat, dont use it twice in a day.  red meat is only allowed once in a day.
-        - Fried or roasted  food is forbidden.
-         Separate foods with backslash n (\\n) instead of commas.
-        IMPORTANT: On fasting days, increase protein intake value by 15% exp: Meet 100g -> Meet 115g.
-        IMPORTANT: Every day should include avocado or olive in one of the meals even in fasting days.
-        On fasting days, only use meat protein in meals.
-        For vegetables, use a variety of vegetables that are sent and dont use For vegetables, use a variety of vegetables and don't write vegetables in general. For example, write cucumber, lettuce, spinach, etc..
-        IMPORTANT: Read the information about each food or rule and implement it carefully. For example, if it is mentioned that a food should be consumed every day, then be sure to include it in the plan.
-        dont use exact same foods and have some different and creative.
         
         OPTIMIZED RULES AND FOOD INFORMATION:
         ${optimizedRules}
@@ -157,7 +165,8 @@ app.post('/api/generate_vip', async (req, res) => {
     } catch (e) {
       return res.status(500).json({ error: 'LLM output is not valid JSON', details: e.message });
     }
-
+    console.log({ optimizedRules });
+    
     return res.json({
       content: parsed,
       model: response.data?.model || openAiModel,

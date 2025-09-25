@@ -91,6 +91,10 @@ Dont miss any rule or food information. only summarize them.
 `
       }
     ];
+    console.log({
+      combinedContent
+    });
+
 
     // درخواست اول برای خلاصه‌سازی
     const summarizeResponse = await axios.post('https://api.openai.com/v1/chat/completions', {
@@ -166,7 +170,7 @@ Dont miss any rule or food information. only summarize them.
     } catch (e) {
       return res.status(500).json({ error: 'LLM output is not valid JSON', details: e.message });
     }
-    
+
     return res.json({
       content: parsed,
       model: response.data?.model || openAiModel,
@@ -196,7 +200,7 @@ const server = https.createServer({
 
 server.listen(port, () => {
   console.log(`Server listening on https://nutrostyle.nutrosal.com:${port}`);
-}); 
+});
 
 
 
